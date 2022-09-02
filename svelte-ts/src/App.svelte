@@ -5,20 +5,26 @@
   import metabrain5 from './assets/metabrain5.png'
   import Counter from './lib/Counter.svelte'
 </script>
+<svelte:head>
+  <link href="/dist/output.css" rel="stylesheet">
+</svelte:head>
 
-<main>
-  <div>
+<main  class="flex flex-col items-center justify-center w-screen h-screen">
+  <div  class="flex flex-col items-center justify-center">
 
-    <a href="https://svelte.dev" target="_blank"> 
-      <img src={metabrain4} class="logo svelte" alt="Svelte Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank"> 
-      <img src={metabrain5} class="logo svelte" alt="Svelte Logo" />
-    </a>
+    <div class="flex">
+      <a href="https://svelte.dev" target="_blank">
+        <img src={metabrain4} class="logo svelte" alt="Svelte Logo" />
+      </a>
+      <a href="https://svelte.dev" target="_blank">
+        <img src={metabrain5} class="logo svelte" alt="Svelte Logo" />
+      </a>
+    </div>
+    <div class="flex font-sans text-cyan-400 text-6xl p-6">Welcome to MetaBrain</div>
   </div>
-  <h1>Vite + Svelte</h1>
+  <h1>An app built with Vite + Svelte</h1>
 
-  <div class="card">
+  <div class="card p-4">
     <Counter />
   </div>
 
@@ -33,7 +39,7 @@
 
 <style>
   .logo {
-    height: 6em;
+    height: 12em;
     padding: 1.5em;
     will-change: filter;
   }
