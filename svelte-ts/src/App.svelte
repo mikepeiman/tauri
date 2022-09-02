@@ -1,4 +1,5 @@
 <script lang="ts">
+  import './tailwind.css'
   import svelteLogo from './assets/svelte.svg'
   import metabrain3 from './assets/metabrain3.png'
   import metabrain4 from './assets/metabrain4.png'
@@ -22,7 +23,7 @@
     </div>
     <div class="flex font-sans text-cyan-400 text-6xl p-6">Welcome to MetaBrain</div>
   </div>
-  <h1>An app built with Vite + Svelte</h1>
+  <h1 class="text-orange-500 text-2xl text-fuchsia-400">An app built with Vite + Svelte</h1>
 
   <div class="card p-4">
     <Counter />
