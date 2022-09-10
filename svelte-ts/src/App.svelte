@@ -13,18 +13,24 @@
   } from "@tauri-apps/api/globalShortcut";
   import { getCurrent as getCurrentWindow } from "@tauri-apps/api/window";
   import App from "./App.svelte";
-  // let shortcut = "CmdOrControl+Space";
   let shortcut = "CmdOrControl+Alt+Space";
 
-  function toggleVisability() {
-
+  async function toggleVisability() {
     const currentWindow = getCurrentWindow();
-    currentWindow.isVisible() ? currentWindow.hide() : currentWindow.show();
+    console.log(`🚀 ~ file: App.svelte ~ line 20 ~ toggleVisability ~ currentWindow`, currentWindow)
+    // currentWindow.isVisible() ? currentWindow.hide() : currentWindow.show();
+    let windowState = await currentWindow.isVisible()
+    console.log(`🚀 ~ file: App.svelte ~ line 23 ~ toggleVisability ~ windowState`, windowState)
+    
+    // windowState.then(() => {
+    //   console.log(`🚀 ~ file: App.svelte ~ line 20 ~ toggleVisability ~ currentWindow.isVisible(): `, currentWindow.isVisible())
+    windowState ? currentWindow.hide() : currentWindow.show();
+    // }) 
     console.log(`show/hide window`)
   }
 
-  onMount(() => {
-
+  onMount(async () => {
+    await toggleVisability
     registerShortcut(shortcut, toggleVisability);
   });
 </script>
