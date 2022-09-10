@@ -9,98 +9,55 @@
   import { onMount, beforeUpdate, afterUpdate } from "svelte";
   import {
     register,
-    registerAll, unregister, isRegistered
+    registerAll,
+    unregister,
+    isRegistered,
   } from "@tauri-apps/api/globalShortcut";
-  import { getCurrent as getCurrentWindow, appWindow } from "@tauri-apps/api/window";
+  import {
+    getCurrent as getCurrentWindow,
+    appWindow,
+    LogicalSize,
+    LogicalPosition,
+    PhysicalSize,
+    PhysicalPosition,
+  } from "@tauri-apps/api/window";
   // import * as w from "@tauri-apps/api/window";
   import App from "./App.svelte";
-  let shortcut = "CmdOrControl+Alt+Space";
-  
-  async function toggleVisability() {
-    const currentWindow = getCurrentWindow();
-    // const currentWindow = getCurrentWindow();
-    // console.log(`🚀 ~ file: App.svelte ~ line 20 ~ toggleVisability ~ currentWindow`, currentWindow)
-    // currentWindow.isVisible() ? currentWindow.hide() : currentWindow.show();
-    let windowState = await currentWindow.isVisible();
-    let windowFocus = await currentWindow.focus();
-    let windowCenter = await currentWindow.center();
-    console.log(
-      `🚀 ~ file: App.svelte ~ line 23 ~ toggleVisability ~ windowState`,
-      windowState
-    );
-    console.log(
-      `🚀 ~ file: App.svelte ~ line 25 ~ toggleVisability ~ windowFocus`,
-      windowFocus
-    );
-    console.log(
-      `🚀 ~ file: App.svelte ~ line 27 ~ toggleVisability ~ windowCenter`,
-      windowCenter
-    );
+  let shortcut = "CommandOrControl+Shift+Space";
 
-    // windowState.then(() => {
-    //   console.log(`🚀 ~ file: App.svelte ~ line 20 ~ toggleVisability ~ currentWindow.isVisible(): `, currentWindow.isVisible())
-    windowState ? currentWindow.hide() : showWindow();
-    // })
-    console.log(`show/hide window`);
-  }
-
-  const setHotkey = async ()=> {
-    // const appWindow = getCurrentWindow();
-    await unregister('CommandOrControl+Shift+Space');
-    const _isRegistered = await isRegistered('CommandOrControl+Shift+Space');
+  const setHotkey = async () => {
+    await unregister(shortcut);
+    const _isRegistered = await isRegistered(shortcut);
     if (!_isRegistered) {
-      await register('CommandOrControl+Shift+Space', async () => {
+      await register(shortcut, async () => {
         const isVisible = await appWindow.isVisible();
-        console.log(isVisible,"go")
-        if (!isVisible){
-          appWindow.focus = true
-          console.log(`🚀 ~ file: App.svelte ~ line 57 ~ awaitregister ~ appWindow.focus`, appWindow.focus)
-          appWindow.setAlwaysOnTop(true)
-          console.log(`🚀 ~ file: App.svelte ~ line 59 ~ awaitregister ~ appWindow.alwaysOnTop`, appWindow.alwaysOnTop)
-          // appWindow.center()
+        console.log(isVisible, "go");
+        if (!isVisible) {
+          appWindow.focus = true;
+          let focused = await appWindow.setFocus()
+          console.log(`🚀 ~ file: App.svelte ~ line 34 ~ awaitregister ~ focused`, focused)
+          let ontop = await appWindow.setAlwaysOnTop(true);
+          console.log(`🚀 ~ file: App.svelte ~ line 36 ~ awaitregister ~ ontop `, ontop )
+          await appWindow.setSize(new LogicalSize(900, 100))
+          await appWindow.setPosition(new PhysicalPosition(200, -600));
+          appWindow.center()
           return appWindow.show();
-          
         }
         appWindow.hide();
-        console.log(`🚀 ~ file: App.svelte ~ line 65 ~ awaitregister ~ appWindow`, appWindow)
-        console.log(`🚀 ~ file: App.svelte ~ line 57 ~ awaitregister ~ appWindow.focus`, appWindow.focus)
-        console.log(`🚀 ~ file: App.svelte ~ line 59 ~ awaitregister ~ appWindow.alwaysOnTop`, appWindow.alwaysOnTop)
       });
       return appWindow.hide();
     }
-    console.log("globalShortcut already registered")
-  }
+    console.log("globalShortcut already registered");
+  };
 
-
-  function showWindow() {
-    getCurrentWindow().show();
-    getCurrentWindow().focus();
-    getCurrentWindow().center();
-  }
-afterUpdate(() => {
-console.log(`🚀 ~ file: App.svelte ~ line 81 ~ afterUpdate ~ afterUpdate`)
-
-  appWindow.listen("show", ({ event, payload }) => { 
-    console.log(`🚀 ~ file: App.svelte ~ line 86 ~ appWindow.listen ~ payload`, payload)
-    console.log(`🚀 ~ file: App.svelte ~ line 89 ~ appWindow.listen ~ event`, event)
-
-    
+  afterUpdate(() => {
+    console.log(`🚀 ~ file: App.svelte ~ line 81 ~ afterUpdate ~ afterUpdate`);
   });
-  console.log(`🚀 ~ file: App.svelte ~ line 89 ~ appWindow.listen ~ appWindow`, appWindow)
-
-})
 
   onMount(async () => {
-    // const appWindow = await getCurrentWindow();
-    appWindow.setTitle = true
-    appWindow.title = "New title"
-    
-    setHotkey();
+    appWindow.title = "New title";
 
-    // console.log(`🚀 ~ file: App.svelte ~ line 15 ~ windowOptions`, windowOptions)
-    // console.log(`🚀 ~ file: App.svelte ~ line 19 ~ w`, w)
-    // await toggleVisability;
-    // registerShortcut(shortcut, toggleVisability);
+    setHotkey();
   });
 </script>
 
