@@ -39,7 +39,7 @@
           let ontop = await appWindow.setAlwaysOnTop(true);
           console.log(`🚀 ~ file: App.svelte ~ line 36 ~ awaitregister ~ ontop `, ontop )
           await appWindow.setSize(new LogicalSize(900, 100))
-          await appWindow.setPosition(new PhysicalPosition(200, -600));
+          // await appWindow.setPosition(new PhysicalPosition(200, -600));
           appWindow.center()
           return appWindow.show();
         }
@@ -55,9 +55,8 @@
   });
 
   onMount(async () => {
-    appWindow.title = "New title";
-
     setHotkey();
+    appWindow.setTitle("MetaBrain")
   });
 </script>
 
