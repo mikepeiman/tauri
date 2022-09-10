@@ -14,6 +14,10 @@
     "allowlist": {
       "all": true
     },
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
@@ -56,10 +60,15 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "svelte-ts",
-        "width": 800
+        "width": 900,
+        "height": 100,
+        "resizable": false,
+        "title": "MetaBrain config",
+        "transparent": true,
+        "decorations": false,
+        "center": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true
       }
     ]
   }

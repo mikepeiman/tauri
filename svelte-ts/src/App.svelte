@@ -1,10 +1,7 @@
 <script lang="ts">
   import "./tailwind.css";
-  import svelteLogo from "./assets/svelte.svg";
-  import metabrain3 from "./assets/metabrain3.png";
-  import metabrain4 from "./assets/metabrain4.png";
   import metabrain5 from "./assets/metabrain5.png";
-  import Counter from "./lib/Counter.svelte";
+  import MainPage from "./components/MainPage.svelte";
 
   import { onMount, beforeUpdate, afterUpdate } from "svelte";
   import {
@@ -20,7 +17,7 @@
     LogicalPosition,
     PhysicalSize,
     PhysicalPosition,
-    WebviewWindow
+    WebviewWindow,
   } from "@tauri-apps/api/window";
   // import * as w from "@tauri-apps/api/window";
   import App from "./App.svelte";
@@ -45,6 +42,12 @@
       x: 0,
       y: 0,
     };
+    const decorated = await appWindow.isDecorated();
+    console.log(
+      `🚀 ~ file: App.svelte ~ line 49 ~ setWindowProperties ~ decorated`,
+      decorated
+    );
+    await appWindow.setDecorations(false);
   };
 
   const setHotkey = async () => {
@@ -56,13 +59,19 @@
         console.log(isVisible, "go");
         if (!isVisible) {
           appWindow.focus = true;
-          let focused = await appWindow.setFocus()
-          console.log(`🚀 ~ file: App.svelte ~ line 34 ~ awaitregister ~ focused`, focused)
+          let focused = await appWindow.setFocus();
+          console.log(
+            `🚀 ~ file: App.svelte ~ line 34 ~ awaitregister ~ focused`,
+            focused
+          );
           let ontop = await appWindow.setAlwaysOnTop(true);
-          console.log(`🚀 ~ file: App.svelte ~ line 36 ~ awaitregister ~ ontop `, ontop )
-          await appWindow.setSize(new LogicalSize(900, 100))
+          console.log(
+            `🚀 ~ file: App.svelte ~ line 36 ~ awaitregister ~ ontop `,
+            ontop
+          );
+          await appWindow.setSize(new LogicalSize(900, 100));
           // await appWindow.setPosition(new PhysicalPosition(200, -600));
-          appWindow.center()
+          appWindow.center();
           await appWindow.requestUserAttention();
           return appWindow.show();
         }
@@ -75,16 +84,25 @@
 
   afterUpdate(() => {
     console.log(`🚀 ~ file: App.svelte ~ line 81 ~ afterUpdate ~ afterUpdate`);
-    const webview = new WebviewWindow('super-input')
-    webview.once('tauri://created', function () {
-      console.log(`🚀 ~ file: App.svelte ~ line 34 ~ created`, webview)
-});
+    const webview = new WebviewWindow("super-input");
+    webview.once("tauri://created", function () {
+      console.log(`🚀 ~ file: App.svelte ~ line 34 ~ created`, webview);
+    });
   });
 
   onMount(async () => {
     setHotkey();
     setWindowProperties();
-    appWindow.setTitle("MetaBrain")
+    appWindow.setTitle("MetaBrain");
+    document
+  .getElementById('titlebar-minimize')
+  .addEventListener('click', () => appWindow.minimize())
+document
+  .getElementById('titlebar-maximize')
+  .addEventListener('click', () => appWindow.toggleMaximize())
+document
+  .getElementById('titlebar-close')
+  .addEventListener('click', () => appWindow.close())
   });
 </script>
 
@@ -92,33 +110,35 @@
   <link href="/dist/output.css" rel="stylesheet" />
 </svelte:head>
 
-<main class="flex flex-col items-center justify-center w-screen h-screen">
-  <div class="flex flex-col items-center justify-center">
-    <div class="flex">
-      <a href="https://svelte.dev" target="_blank">
-        <img src={metabrain5} class="logo svelte" alt="Svelte Logo" />
-      </a>
+<main
+  class="flex flex-col items-center justify-center w-full h-full  bg-blue-300 overflow-hidden border-2 border-cyan-300">
+  <div data-tauri-drag-region class="titlebar rounded-t-md">
+    <!-- <div class="titlebar-button" id="titlebar-minimize">
+      <img
+        src="https://api.iconify.design/mdi:window-minimize.svg"
+        alt="minimize"
+      />
     </div>
-    <div class="flex title text-cyan-800 text-6xl font-bold p-2">MetaBrain</div>
+    <div class="titlebar-button" id="titlebar-maximize">
+      <img
+        src="https://api.iconify.design/mdi:window-maximize.svg"
+        alt="maximize"
+      />
+    </div>
+    <div class="titlebar-button" id="titlebar-close">
+      <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
+    </div> -->
+    <div class="titlebar-button " id="titlebar-close">
+      <img src="https://api.iconify.design/mdi-settings.svg" alt="close" class="text-white" />
+    </div> 
   </div>
-  <h1 class="text-orange-500 text-2xl text-fuchsia-400">
-    An app built with Vite + Svelte + Tauri
-  </h1>
-
-  <div class="card p-4">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank"
-      >SvelteKit</a
-    >, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">Click on the Vite and Svelte logos to learn more</p>
+  <!-- <MainPage /> -->
+  <div class="flex h-24 w-full bg-black"><input type="text"></div>
 </main>
 
 <style>
+
+
   .title {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
@@ -135,6 +155,27 @@
     filter: drop-shadow(0 0 2em #ff3e00aa);
   }
   .read-the-docs {
-    color: #888;
+    /* color: #888; */
   }
+  .titlebar {
+  height: 30px;
+  background: #329ea3;
+  user-select: none;
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.titlebar-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+.titlebar-button:hover {
+  background: #5bbec3;
+}
 </style>
