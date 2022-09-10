@@ -20,10 +20,32 @@
     LogicalPosition,
     PhysicalSize,
     PhysicalPosition,
+    WebviewWindow
   } from "@tauri-apps/api/window";
   // import * as w from "@tauri-apps/api/window";
   import App from "./App.svelte";
   let shortcut = "CommandOrControl+Shift+Space";
+
+  const setWindowProperties = async () => {
+    const window = await getCurrentWindow();
+
+    const logicalSize: LogicalSize = {
+      width: 800,
+      height: 600,
+    };
+    const logicalPosition: LogicalPosition = {
+      x: 0,
+      y: 0,
+    };
+    const physicalSize: PhysicalSize = {
+      width: 800,
+      height: 600,
+    };
+    const physicalPosition: PhysicalPosition = {
+      x: 0,
+      y: 0,
+    };
+  };
 
   const setHotkey = async () => {
     await unregister(shortcut);
@@ -41,6 +63,7 @@
           await appWindow.setSize(new LogicalSize(900, 100))
           // await appWindow.setPosition(new PhysicalPosition(200, -600));
           appWindow.center()
+          await appWindow.requestUserAttention();
           return appWindow.show();
         }
         appWindow.hide();
@@ -52,10 +75,15 @@
 
   afterUpdate(() => {
     console.log(`🚀 ~ file: App.svelte ~ line 81 ~ afterUpdate ~ afterUpdate`);
+    const webview = new WebviewWindow('super-input')
+    webview.once('tauri://created', function () {
+      console.log(`🚀 ~ file: App.svelte ~ line 34 ~ created`, webview)
+});
   });
 
   onMount(async () => {
     setHotkey();
+    setWindowProperties();
     appWindow.setTitle("MetaBrain")
   });
 </script>
