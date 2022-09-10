@@ -1,0 +1,1 @@
+tauri-plugin-single-instance = { git = "https://github.com/amrbashir/tauri-plugin-single-instance/" }

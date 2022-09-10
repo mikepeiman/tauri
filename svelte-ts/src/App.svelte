@@ -90,19 +90,28 @@
     });
   });
 
+  function addEventListeners() {
+    console.log(`🚀 ~ file: App.svelte ~ line 81 ~ addEventListeners`);
+    const webview = new WebviewWindow("super-input");
+    webview.once("tauri://created", function () {
+      console.log(`🚀 ~ file: App.svelte ~ line 34 ~ created`, webview);
+    });
+    // document
+    //   .getElementById("titlebar-minimize")
+    //   .addEventListener("click", () => appWindow.minimize());
+    // document
+    //   .getElementById("titlebar-maximize")
+    //   .addEventListener("click", () => appWindow.toggleMaximize());
+    document
+      .getElementById("titlebar-close")
+      .addEventListener("click", () => appWindow.close());
+  }
+
   onMount(async () => {
     setHotkey();
     setWindowProperties();
     appWindow.setTitle("MetaBrain");
-    document
-  .getElementById('titlebar-minimize')
-  .addEventListener('click', () => appWindow.minimize())
-document
-  .getElementById('titlebar-maximize')
-  .addEventListener('click', () => appWindow.toggleMaximize())
-document
-  .getElementById('titlebar-close')
-  .addEventListener('click', () => appWindow.close())
+    addEventListeners();
   });
 </script>
 
@@ -124,21 +133,22 @@ document
         src="https://api.iconify.design/mdi:window-maximize.svg"
         alt="maximize"
       />
+    </div> -->
+    <div class="titlebar-button " id="titlebar-close">
+      <img
+      src="https://api.iconify.design/mdi-settings.svg"
+      alt="close"
+      class="text-white" />
     </div>
     <div class="titlebar-button" id="titlebar-close">
       <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
-    </div> -->
-    <div class="titlebar-button " id="titlebar-close">
-      <img src="https://api.iconify.design/mdi-settings.svg" alt="close" class="text-white" />
     </div> 
   </div>
   <!-- <MainPage /> -->
-  <div class="flex h-24 w-full bg-black"><input type="text"></div>
+  <div class="flex h-24 w-full bg-black"><input type="text" /></div>
 </main>
 
 <style>
-
-
   .title {
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
@@ -158,24 +168,24 @@ document
     /* color: #888; */
   }
   .titlebar {
-  height: 30px;
-  background: #329ea3;
-  user-select: none;
-  display: flex;
-  justify-content: flex-end;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-.titlebar-button {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-}
-.titlebar-button:hover {
-  background: #5bbec3;
-}
+    height: 30px;
+    background: #329ea3;
+    user-select: none;
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  .titlebar-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+  }
+  .titlebar-button:hover {
+    background: #5bbec3;
+  }
 </style>
