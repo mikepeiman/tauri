@@ -55,7 +55,7 @@
         if (!isVisible){
           appWindow.focus = true
           console.log(`🚀 ~ file: App.svelte ~ line 57 ~ awaitregister ~ appWindow.focus`, appWindow.focus)
-          appWindow.alwaysOnTop = true
+          appWindow.setAlwaysOnTop(true)
           console.log(`🚀 ~ file: App.svelte ~ line 59 ~ awaitregister ~ appWindow.alwaysOnTop`, appWindow.alwaysOnTop)
           // appWindow.center()
           return appWindow.show();
